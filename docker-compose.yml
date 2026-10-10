@@ -1,0 +1,26 @@
+# audit.rawone.co.in — runs behind the existing n8n Traefik (network root_default, resolver mytlschallenge)
+services:
+  rawone-audit:
+    build: .
+    image: rawone-audit:latest
+    container_name: rawone-audit
+    restart: unless-stopped
+    env_file: .env
+    mem_limit: 512m
+    stop_grace_period: 90s   # let running audits finish on redeploy
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+    networks: [root_default]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=root_default
+      - traefik.http.routers.rawone-audit.rule=Host(`audit.rawone.co.in`)
+      - traefik.http.routers.rawone-audit.entrypoints=websecure
+      - traefik.http.routers.rawone-audit.tls=true
+      - traefik.http.routers.rawone-audit.tls.certresolver=mytlschallenge
+      - traefik.http.services.rawone-audit.loadbalancer.server.port=3000
+
+networks:
+  root_default:
+    external: true

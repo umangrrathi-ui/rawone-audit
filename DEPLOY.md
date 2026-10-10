@@ -1,4 +1,38 @@
-# Deploy — audit.rawone.co.in (Hostinger VPS, Ubuntu 24.04)
+# Deploy — audit.rawone.co.in (Hostinger VPS, Docker + existing n8n Traefik)
+
+**Actual setup (Oct 2026):** VPS pe n8n ka Traefik (Docker) 80/443 sambhalta hai — network `root_default`, cert resolver `mytlschallenge`. Host Node v18 hai, isliye app Docker container mein chalta hai (reviewflow jaisa). PM2/Nginx wala section neeche sirf reference ke liye hai.
+
+## Fresh install
+
+```bash
+# 0. (ek baar) extra swap — build ke time RAM tight hai
+fallocate -l 2G /swapfile2 && chmod 600 /swapfile2 && mkswap /swapfile2 && swapon /swapfile2
+echo '/swapfile2 none swap sw 0 0' >> /etc/fstab
+
+# 1. code
+cd /root && git clone https://github.com/umangrrathi-ui/rawone-audit.git
+cd rawone-audit
+cp .env.example .env && nano .env && chmod 600 .env
+
+# 2. build + run
+docker compose up -d --build
+docker logs -f rawone-audit
+```
+
+## Update
+```bash
+cd /root/rawone-audit && git pull && docker compose up -d --build && docker image prune -f
+```
+
+## .env change ke baad
+```bash
+docker compose up -d --force-recreate
+```
+
+---
+
+## (Reference) PM2 + Nginx setup — sirf agar kabhi Traefik na ho
+
 
 App same VPS pe chalega jahan n8n hai. App port **3000** sirf `127.0.0.1` pe sunta hai; Nginx bahar se 80/443 leke andar bhejta hai.
 
