@@ -1,7 +1,9 @@
 // Server component — the finished audit report.
 import { scorecardRows } from "@/lib/score";
 import Logo from "./Logo";
-import Upsell from "./Upsell";
+import Upsell, { upsellHref } from "./Upsell";
+import DownloadPdf from "./DownloadPdf";
+import PrintCta from "./PrintCta";
 import Feedback from "./Feedback";
 import StickyCta from "./StickyCta";
 
@@ -337,6 +339,7 @@ export default function Report({ audit, cfg }) {
             {cfg.waApi ? "Get this report on WhatsApp" : "Save this report to WhatsApp"}
           </a>
         )}
+        <DownloadPdf id={audit.id} handle={ig.username} />
       </section>
 
       <section className="section">
@@ -397,7 +400,7 @@ export default function Report({ audit, cfg }) {
         </div>
         <div className="findings">{(ai.ig_findings || []).map((f, i) => <Finding key={i} f={f} />)}</div>
         {!audit.paid && (
-          <a className="card card--beige" href="#unlock" style={{ textDecoration: "none", display: "flex", gap: 12, alignItems: "center" }}>
+          <a className="card card--beige no-print" href="#unlock" style={{ textDecoration: "none", display: "flex", gap: 12, alignItems: "center" }}>
             <span className="lock-ic" aria-hidden="true">🔒</span>
             <span className="small">
               <b style={{ color: "var(--ink)" }}>This covers only your last {ig.posts.length} posts.</b> The Full Audit analyses 36 posts — month-by-month trend, best & worst posts and hashtags. <span className="text-orange">See what's inside →</span>
@@ -477,16 +480,17 @@ export default function Report({ audit, cfg }) {
         <div className="glow-card">
           <ol className="wins">{(ai.quick_wins || []).map((w, i) => <li key={i}>{w}</li>)}</ol>
         </div>
+        <DownloadPdf id={audit.id} handle={ig.username} className="btn btn--dark" />
       </section>
 
-      <section className="section">
+      <section className="section no-print">
         <Chapter num="06" title="Did this report hit home?" sub="Two taps. It helps us — and tells us how we can help you." />
         <Feedback id={audit.id} existing={audit.feedback || null} callLink={callLink} />
       </section>
 
       {audit.paid ? <DeepSection audit={audit} /> : <Upsell cfg={upsellCfg} />}
 
-      <section className="section">
+      <section className="section no-print">
         <div className="dark-card stack">
           <span className="eyebrow">Free strategy call</span>
           <h2>Want us to fix this for you?</h2>
@@ -506,6 +510,19 @@ export default function Report({ audit, cfg }) {
           </p>
         </div>
       </section>
+
+      <PrintCta
+        handle={ig.username}
+        callLink={callLink}
+        unlockLink={cfg.payEnabled ? `${cfg.reportUrl}#unlock` : upsellHref(upsellCfg)}
+        reportUrl={cfg.reportUrl}
+        waNumber={cfg.waNumber}
+        price={cfg.price}
+        paid={audit.paid}
+      />
+      <div className="print-only print-footer">
+        Prepared by RawOne · <a href={cfg.reportUrl}>audit.rawone.co.in</a> · <a href={callLink}>Book a free call</a>
+      </div>
 
       <footer className="footer">
         <span>Prepared by RawOne · Ahmedabad · {dateIN(audit.created_at)}</span>

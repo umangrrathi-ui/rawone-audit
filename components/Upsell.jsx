@@ -17,7 +17,7 @@ const INSIDE = [
 
 export default function Upsell({ cfg }) {
   return (
-    <section className="section" id="unlock">
+    <section className="section no-print" id="unlock">
       <div className="chapter">
         <span className="num">07</span>
         <h2>Your Full Audit is ready to unlock</h2>

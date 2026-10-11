@@ -301,3 +301,38 @@ td a { color: var(--orange-deep); }
   .landing .form-card { position: sticky; top: 24px; margin-top: 36px; }
   .landing .preview { margin-left: 0; }
 }
+
+/* ---------- print / PDF ---------- */
+.print-only { display: none; }
+@media print {
+  @page { size: A4; margin: 12mm 12mm 16mm; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; animation: none !important; transition: none !important; }
+  html, body { background: #fff !important; font-size: 13px; }
+  .no-print, .sticky, .btn--wa, .bg-blobs, .footer, .tag { display: none !important; }
+  .print-only { display: block !important; }
+  .page { max-width: none; padding: 0; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .section { margin-top: 22px; break-inside: auto; }
+  .card, .finding, .stat, .chart, .review, .glow-card, .plan .week, .brow, tr, .pc-grid { break-inside: avoid; page-break-inside: avoid; }
+  h2, .chapter { break-after: avoid; page-break-after: avoid; }
+  .card, .stat, .finding, .chart { box-shadow: none !important; }
+  .glow-card { box-shadow: none !important; }
+  a { text-decoration: none; }
+  .print-footer { position: fixed; bottom: 0; left: 0; right: 0; text-align: center; font-size: 9px; color: var(--muted); background: #fff; padding-top: 4px; }
+  body { padding-bottom: 8mm; }
+  .chart svg { max-height: 230px; width: auto; margin: 0 auto; }
+  .print-footer a { color: var(--orange-deep); }
+  .print-cta { break-before: page; page-break-before: always; margin-top: 0; }
+}
+.print-cta { border-radius: var(--r-lg); background: var(--dark); color: #fff; padding: 28px; }
+.print-cta h2 { color: #fff; margin: 10px 0 8px; }
+.print-cta p { color: #cfcac6; }
+.pc-grid { display: grid; grid-template-columns: 1fr 150px; gap: 24px; align-items: center; margin-top: 22px; }
+.pc-links { display: flex; flex-direction: column; gap: 10px; }
+.pc-btn { display: block; padding: 13px 18px; border-radius: 999px; background: #2a2a2a; color: #fff !important; font-family: var(--font-head); font-weight: 600; font-size: 14px; border: 1px solid #3a3a3a; }
+.pc-btn--primary { background: var(--orange); border-color: var(--orange); }
+.pc-contact { font-size: 12px; margin-top: 6px; }
+.pc-contact a { color: #ffb59f !important; }
+.pc-qr { background: #fff; border-radius: 14px; padding: 12px; text-align: center; }
+.pc-qr svg { width: 100%; height: auto; }
+.pc-qr span { display: block; margin-top: 6px; font-size: 10px; color: var(--ink); font-weight: 600; }

@@ -69,3 +69,6 @@ create table if not exists audit_feedback (
 );
 alter table audit_feedback enable row level security;
 revoke all on audit_feedback from anon, authenticated;
+
+-- v2.3: PDF download counter
+alter table audits add column if not exists pdf_downloads int default 0;

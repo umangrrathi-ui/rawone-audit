@@ -16,7 +16,7 @@ export default async function Admin({ searchParams }) {
 
   const { data: audits } = await db()
     .from("audits")
-    .select("id, created_at, name, whatsapp, industry, ig_handle, score, status, paid, deep_status, code")
+    .select("id, created_at, name, whatsapp, industry, ig_handle, score, status, paid, deep_status, code, pdf_downloads")
     .order("created_at", { ascending: false })
     .limit(150);
   const ids = (audits || []).map((a) => a.id);
@@ -61,7 +61,7 @@ export default async function Admin({ searchParams }) {
                     <span className="muted small">{a.industry}</span>
                   </td>
                   <td><a href={`https://instagram.com/${a.ig_handle}`} target="_blank" rel="noreferrer">@{a.ig_handle}</a></td>
-                  <td className="num">{a.score ?? "–"}</td>
+                  <td className="num">{a.score ?? "–"}{a.pdf_downloads ? <div className="small muted">📄 {a.pdf_downloads}</div> : null}</td>
                   <td style={{ maxWidth: 260 }}>
                     {f ? (
                       <>
