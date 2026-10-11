@@ -294,7 +294,12 @@ export default function Report({ audit, cfg }) {
   const b = m.bench;
   const ai = audit.ai || {};
   const rows = scorecardRows(m.parts);
-  const waText = encodeURIComponent(`REPORT ${audit.code}`);
+  // API mode: bot replies to "REPORT CODE". Manual mode (no WA API yet): the lead sends us the link itself.
+  const waText = encodeURIComponent(
+    cfg.waApi
+      ? `REPORT ${audit.code}`
+      : `Hi RAWONE! Maine @${ig.username} ka free audit kiya. Score ${audit.score}/100.\nReport: ${cfg.reportUrl}\n(code ${audit.code})`
+  );
   const waLink = cfg.waNumber ? `https://wa.me/${cfg.waNumber}?text=${waText}` : null;
   const callLink =
     cfg.callUrl ||
@@ -325,7 +330,7 @@ export default function Report({ audit, cfg }) {
 
         {waLink && !audit.wa_verified && (
           <a className="btn btn-wa" href={waLink} target="_blank" rel="noreferrer">
-            Report WhatsApp pe paao
+            {cfg.waApi ? "Report WhatsApp pe paao" : "Report WhatsApp pe save karo"}
           </a>
         )}
         {audit.wa_verified && <p className="ok">Report link aapke WhatsApp pe bhej diya gaya hai ✓</p>}

@@ -44,6 +44,8 @@ export default async function ReportPage({ params, searchParams }) {
     waNumber: process.env.WA_BUSINESS_NUMBER || null,
     callUrl: process.env.STRATEGY_CALL_URL || null,
     price: price(),
+    waApi: !!(process.env.WA_TOKEN && process.env.WA_PHONE_NUMBER_ID),
+    reportUrl: `${(process.env.APP_URL || "").replace(/\/$/, "")}/r/${audit.id}`,
     payEnabled: !!(process.env.CASHFREE_APP_ID && process.env.CASHFREE_SECRET),
     paidReturn: sp?.paid === "1",
   };
