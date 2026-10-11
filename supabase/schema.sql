@@ -57,3 +57,15 @@ order by created_at desc;
 
 -- anon/authenticated ko kuch nahi chahiye: sirf server (service_role) access
 revoke all on audits, wa_contacts, wa_messages, leads_export from anon, authenticated;
+
+-- v2: report feedback ("Did this report hit home?")
+create table if not exists audit_feedback (
+  audit_id uuid primary key references audits(id) on delete cascade,
+  rating text not null,                 -- yes | partly | no
+  needs text[] default '{}',
+  comment text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+alter table audit_feedback enable row level security;
+revoke all on audit_feedback from anon, authenticated;

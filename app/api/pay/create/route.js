@@ -11,7 +11,7 @@ export async function POST(req) {
   if (!id) return NextResponse.json({ error: "missing id" }, { status: 400 });
 
   const audit = await getAudit(id).catch(() => null);
-  if (!audit || audit.status !== "done") return NextResponse.json({ error: "Report nahi mili" }, { status: 404 });
+  if (!audit || audit.status !== "done") return NextResponse.json({ error: "Report not found." }, { status: 404 });
   if (audit.paid) return NextResponse.json({ alreadyPaid: true });
 
   const orderId = `${audit.code}_${Date.now()}`;
@@ -29,6 +29,6 @@ export async function POST(req) {
     return NextResponse.json({ paymentSessionId: order.payment_session_id, mode: cfMode() });
   } catch (e) {
     console.error("[pay/create]", e);
-    return NextResponse.json({ error: "Payment shuru nahi ho paya. Thodi der mein try karo." }, { status: 502 });
+    return NextResponse.json({ error: "Couldn't start the payment. Please try again in a moment." }, { status: 502 });
   }
 }

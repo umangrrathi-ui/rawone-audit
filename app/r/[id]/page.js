@@ -1,13 +1,21 @@
 import { notFound } from "next/navigation";
-import { getAudit } from "@/lib/supabase";
+import { db, getAudit } from "@/lib/supabase";
 import Report from "@/components/Report";
 import AutoRefresh from "@/components/AutoRefresh";
+import RunningView from "@/components/RunningView";
+import Logo from "@/components/Logo";
 import { price } from "@/lib/cashfree";
 
 export const dynamic = "force-dynamic";
-export const metadata = { robots: { index: false, follow: false } };
+export const metadata = { title: "Your Audit Report – RawOne", robots: { index: false, follow: false } };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+async function getFeedback(id) {
+  if (process.env.MOCK_REPORT === "1") return null;
+  const { data } = await db().from("audit_feedback").select("rating, needs").eq("audit_id", id).maybeSingle();
+  return data || null;
+}
 
 export default async function ReportPage({ params, searchParams }) {
   const { id } = await params;
@@ -18,27 +26,28 @@ export default async function ReportPage({ params, searchParams }) {
 
   if (audit.status === "running") {
     return (
-      <main className="wrap" style={{ maxWidth: 560 }}>
-        <AutoRefresh every={3000} />
-        <section className="card">
-          <h2>Report ban rahi hai…</h2>
-          <p className="muted">{audit.step || "Bas kuch second."}</p>
-        </section>
+      <main className="page page--narrow">
+        <div className="topbar"><Logo /></div>
+        <section className="card"><RunningView id={id} handle={audit.ig_handle} /></section>
       </main>
     );
   }
 
   if (audit.status === "failed") {
     return (
-      <main className="wrap" style={{ maxWidth: 560 }}>
-        <section className="card">
-          <h2>Report nahi ban payi</h2>
-          <p className="muted">{audit.error}</p>
-          <a className="btn btn-primary" href="/">Dobara try karo</a>
+      <main className="page page--narrow">
+        <div className="topbar"><Logo /></div>
+        <section className="card stack">
+          <span className="eyebrow">Audit stopped</span>
+          <h2>We couldn't build this report</h2>
+          <p>{audit.error}</p>
+          <div><a className="btn btn--primary" href="/">Try again</a></div>
         </section>
       </main>
     );
   }
+
+  audit.feedback = await getFeedback(id).catch(() => null);
 
   const cfg = {
     waNumber: process.env.WA_BUSINESS_NUMBER || null,

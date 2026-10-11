@@ -1,35 +1,40 @@
 import AuditForm from "@/components/AuditForm";
+import Logo from "@/components/Logo";
 import { INDUSTRY_OPTIONS } from "@/lib/benchmarks";
 
 export default function Home() {
   return (
-    <main className="wrap" style={{ maxWidth: 560 }}>
-      <header>
-        <div className="brandrow">
-          <span className="brand">RAWONE</span>
-          <span className="tag">Free · 45 sec</span>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <p className="eyebrow">Instagram + Google audit</p>
-          <h1>Aapka business online kitna strong hai?</h1>
-          <p className="lede">
-            Apna Instagram handle aur Google Maps link daalo. 45 second mein score, 3-4 problems aur 3 quick fixes —
-            screen pe aur WhatsApp pe.
-          </p>
-        </div>
-        <ul className="bullets">
-          <li>Last 9 posts ka engagement vs industry benchmark</li>
-          <li>Google rating, reviews aur reply rate check</li>
-          <li>3 quick wins jo aap kal se kar sakte ho</li>
-        </ul>
-      </header>
+    <main className="page page--narrow">
+      <div className="topbar">
+        <Logo href="/" />
+        <span className="tag">Free · 60 sec</span>
+      </div>
 
-      <section className="card">
+      <section className="hero reveal">
+        <span className="eyebrow">Free Business Audit</span>
+        <h1>
+          How strong is your business <span className="hl">online?</span>
+        </h1>
+        <p className="lead">
+          Enter your Instagram handle and Google Maps link. In under a minute you get a score, the issues holding you back,
+          and 3 fixes you can do this week.
+        </p>
+        <ul className="ticks">
+          <li>Engagement on your last 9 posts vs your industry benchmark</li>
+          <li>Google rating, reviews and reply rate check</li>
+          <li>3 quick wins you can start tomorrow</li>
+        </ul>
+      </section>
+
+      <section className="card reveal" style={{ marginTop: 28, animationDelay: ".1s" }}>
         <AuditForm industries={INDUSTRY_OPTIONS} />
       </section>
 
-      <footer>
-        <span>RAWONE · Digital marketing agency, Ahmedabad</span>
+      <footer className="footer">
+        <span>
+          Made by RawOne · Digital marketing studio, Ahmedabad
+        </span>
+        <span>We only read public data. Your number is used to share your report and follow up.</span>
       </footer>
     </main>
   );

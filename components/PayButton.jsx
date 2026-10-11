@@ -12,7 +12,7 @@ function loadSdk() {
   });
 }
 
-export default function PayButton({ id, price, className = "btn btn-light" }) {
+export default function PayButton({ id, price, className = "btn btn--light" }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
 
@@ -27,12 +27,11 @@ export default function PayButton({ id, price, className = "btn btn-light" }) {
       });
       const j = await res.json();
       if (j.alreadyPaid) return window.location.reload();
-      if (!res.ok) throw new Error(j.error || "Payment shuru nahi ho paya.");
+      if (!res.ok) throw new Error(j.error || "Couldn't start the payment.");
       const Cashfree = await loadSdk();
-      const cf = Cashfree({ mode: j.mode });
-      await cf.checkout({ paymentSessionId: j.paymentSessionId, redirectTarget: "_self" });
+      await Cashfree({ mode: j.mode }).checkout({ paymentSessionId: j.paymentSessionId, redirectTarget: "_self" });
     } catch (e) {
-      setErr(e.message === "sdk" ? "Payment page load nahi hua. Dobara try karo." : e.message);
+      setErr(e.message === "sdk" ? "The payment page didn't load. Please try again." : e.message);
       setBusy(false);
     }
   }
@@ -40,7 +39,7 @@ export default function PayButton({ id, price, className = "btn btn-light" }) {
   return (
     <>
       <button className={className} onClick={pay} disabled={busy}>
-        {busy ? "Payment khul raha hai…" : `Full audit + 30-din plan — ₹${price}`}
+        {busy ? "Opening secure payment…" : `Unlock my Full Audit — ₹${price}`}
       </button>
       {err && <p className="err">{err}</p>}
     </>

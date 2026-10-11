@@ -53,7 +53,7 @@ export async function POST(req) {
   after(async () => {
     await alertTeam(
       "paid",
-      `💰 ₹${body.data?.order?.order_amount ?? 299} PAID — ${audit.name || ""} (+${audit.whatsapp})\n@${audit.ig_handle} · score ${audit.score}\nSabse hot lead — 24 ghante mein call karo.\n${appUrl(`/r/${audit.id}`)}`,
+      `💰 ₹${body.data?.order?.order_amount ?? 299} PAID — ${audit.name || ""} (+${audit.whatsapp})\n@${audit.ig_handle} · score ${audit.score}\nHottest lead — call within 24 hours.\n${appUrl(`/r/${audit.id}`)}`,
       { auditId: audit.id, phone: audit.whatsapp, handle: audit.ig_handle, score: audit.score }
     );
     await runDeep(audit.id);

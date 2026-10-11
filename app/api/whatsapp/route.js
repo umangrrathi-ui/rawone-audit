@@ -72,12 +72,12 @@ async function handle(m) {
 
   if (cmd === "STOP") {
     await upsertContact(from, { opted_out: true });
-    await sendText(from, "Done. Aapko aage koi message nahi aayega. Wapas shuru karne ke liye START bhejo.");
+    await sendText(from, "Done — you won't receive any more messages. Send START to opt back in.");
     return;
   }
   if (cmd === "START") {
     await upsertContact(from, { opted_out: false });
-    await sendText(from, "Welcome back! Report chahiye toh REPORT likh ke bhejo.");
+    await sendText(from, "Welcome back! Send REPORT to get your latest report.");
     return;
   }
   if (contact?.opted_out) return;
@@ -101,7 +101,7 @@ async function handle(m) {
       audit = data?.[0] || null;
     }
     if (!audit) {
-      await sendText(from, `Is number pe koi report nahi mili. Free audit ke liye ye form bharo (1 minute): ${appUrl("/")}`);
+      await sendText(from, `We couldn't find a report for this number. Get your free audit here (1 minute): ${appUrl("/")}`);
       return;
     }
     await verifyLead(audit, from, m._name);
@@ -113,13 +113,13 @@ async function handle(m) {
     await alertTeam("reply", `💬 Reply from ${contact.name || m._name || ""} (+${from}):\n"${text.slice(0, 500)}"`, { phone: from, text });
     const last = contact.last_autoreply_at ? new Date(contact.last_autoreply_at).getTime() : 0;
     if (Date.now() - last > 6 * 3600 * 1000) {
-      await sendText(from, "Thanks! Hamari team jaldi reply karegi. 🙏");
+      await sendText(from, "Thanks! Our team will reply shortly. 🙏");
       await upsertContact(from, { last_autoreply_at: new Date().toISOString() });
     }
   } else {
     await sendText(
       from,
-      `Namaste! RAWONE ka free Instagram + Google audit 45 second mein milta hai. Ye form bharo: ${appUrl("/")}\n\nReport already hai? Uska code bhejo, jaise: REPORT AB12CD`
+      `Hi! Get a free Instagram + Google audit from RawOne in under a minute: ${appUrl("/")}\n\nAlready have a report? Send its code, e.g. REPORT AB12CD`
     );
   }
 }
@@ -132,13 +132,13 @@ async function verifyLead(audit, from, waName) {
 
   const name = audit.name || waName || "";
   if (audit.status === "running") {
-    await sendText(from, `Hi ${name}, @${audit.ig_handle} ki report abhi ban rahi hai. 1 minute mein link yahin aa jaayega.`);
+    await sendText(from, `Hi ${name}, your report for @${audit.ig_handle} is still being prepared. The link will arrive here in about a minute.`);
     // pipeline sends the link when done (see lib/pipeline.js → notifyIfVerified)
   } else if (audit.status === "done") {
-    await sendText(from, `Hi ${name}, @${audit.ig_handle} ki audit report ready hai: ${reportLink(audit.id)}\n\nKoi sawaal ho toh yahin reply karo.`);
+    await sendText(from, `Hi ${name}, your audit for @${audit.ig_handle} is ready: ${reportLink(audit.id)}\n\nAny questions? Just reply here.`);
     await upsertContact(from, { report_sent: true });
   } else {
-    await sendText(from, `Hi ${name}, @${audit.ig_handle} ki report ban nahi payi. Hamari team manually check karke yahin bhejegi.`);
+    await sendText(from, `Hi ${name}, we couldn't build the report for @${audit.ig_handle} automatically. Our team will check and send it here.`);
   }
 
   if (firstTime) {
