@@ -238,3 +238,66 @@ td a { color: var(--orange-deep); }
 
 .footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line-soft); display: flex; flex-direction: column; gap: 6px; align-items: center; text-align: center; font-size: .82rem; color: var(--muted); }
 .footer a { color: var(--ink); }
+
+/* ---------- landing motion ---------- */
+.bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.bg-blobs span { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55; }
+.bg-blobs .b1 { width: 420px; height: 420px; background: #ffd5c8; top: -140px; right: -120px; animation: drift1 18s ease-in-out infinite; }
+.bg-blobs .b2 { width: 340px; height: 340px; background: #ffe9d6; top: 40%; left: -160px; animation: drift2 22s ease-in-out infinite; }
+.bg-blobs .b3 { width: 260px; height: 260px; background: #ffc4b0; bottom: -80px; right: 10%; opacity: .35; animation: drift1 26s ease-in-out infinite reverse; }
+@keyframes drift1 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-40px, 50px) scale(1.08); } }
+@keyframes drift2 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(60px, -30px) scale(.94); } }
+
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #1f9d55; box-shadow: 0 0 0 0 rgba(31,157,85,.6); animation: livePulse 2s infinite; }
+@keyframes livePulse { 0% { box-shadow: 0 0 0 0 rgba(31,157,85,.55); } 70% { box-shadow: 0 0 0 8px rgba(31,157,85,0); } 100% { box-shadow: 0 0 0 0 rgba(31,157,85,0); } }
+
+.rot { position: relative; color: var(--orange); white-space: nowrap; }
+.rot::after { content: ""; position: absolute; left: 0; right: 10px; bottom: .02em; height: .12em; border-radius: 4px; background: var(--peach-2); z-index: -1; }
+.caret { display: inline-block; width: 3px; height: .9em; margin-left: 3px; vertical-align: -0.08em; background: var(--orange); border-radius: 2px; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero h1 .hl { display: inline-block; }
+
+/* preview card */
+.preview { position: relative; margin: 30px auto 6px; max-width: 420px; padding: 18px 10px 26px; }
+.pv-card { position: relative; z-index: 2; background: #fff; border: 1px solid var(--line-soft); border-radius: var(--r-lg); padding: 18px; box-shadow: 0 30px 60px -28px rgba(254,96,55,.45), var(--shadow-card);
+  animation: rise .8s cubic-bezier(.2,.8,.2,1) .35s both, floaty 6s ease-in-out 1.2s infinite; transform: rotate(-1.5deg); }
+@keyframes floaty { 0%, 100% { transform: rotate(-1.5deg) translateY(0); } 50% { transform: rotate(-.5deg) translateY(-8px); } }
+.pv-top { display: flex; gap: 14px; align-items: center; }
+.pv-gauge { position: relative; width: 74px; height: 74px; flex: none; }
+.pv-gauge svg { width: 100%; height: 100%; }
+.pv-gauge b { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; color: var(--ink); }
+.pv-meta { display: flex; flex-direction: column; gap: 4px; }
+.pv-label { font-family: var(--font-head); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.pv-handle { font-family: var(--font-head); font-weight: 700; color: var(--ink); }
+.pv-bars { display: grid; gap: 9px; margin-top: 16px; }
+.pv-row { display: grid; grid-template-columns: 7.5rem 1fr; gap: 10px; align-items: center; font-size: .8rem; color: var(--body); }
+.pv-row i { height: 8px; border-radius: 99px; background: var(--beige); overflow: hidden; }
+.pv-row em { display: block; height: 100%; border-radius: 99px; transform-origin: left; animation: grow 1.1s cubic-bezier(.2,.8,.2,1) both; }
+.pv-chip { position: absolute; z-index: 3; font-size: .78rem; font-weight: 500; padding: 7px 12px; border-radius: 99px; background: #fff; border: 1px solid var(--line-soft); box-shadow: var(--shadow-card); white-space: nowrap; color: var(--ink); }
+.pv-chip.c1 { top: 0; right: -4px; animation: popIn .5s cubic-bezier(.2,1.4,.4,1) 1.1s both, bob 4.5s ease-in-out 1.6s infinite; }
+.pv-chip.c2 { bottom: 4px; left: -6px; animation: popIn .5s cubic-bezier(.2,1.4,.4,1) 1.35s both, bob 5s ease-in-out 1.9s infinite reverse; }
+.pv-chip.c3 { bottom: -8px; right: 18px; animation: popIn .5s cubic-bezier(.2,1.4,.4,1) 1.6s both, bob 5.5s ease-in-out 2.1s infinite; }
+@keyframes popIn { from { opacity: 0; transform: scale(.6) translateY(8px); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@media (max-width: 420px) { .pv-chip.c1 { right: 0; } .pv-chip.c2 { left: 0; } }
+
+/* form card + CTA shine */
+.form-card { margin-top: 24px; position: relative; }
+.form-card::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, rgba(254,96,55,.5), transparent 40%, transparent 60%, rgba(254,96,55,.35));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+.btn--primary { position: relative; overflow: hidden; }
+.btn--primary::after { content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.45), transparent); transform: skewX(-20deg); animation: shine 3.2s ease-in-out 1.5s infinite; }
+@keyframes shine { 0%, 60% { left: -60%; } 100% { left: 130%; } }
+.btn .arr { display: inline-block; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+.input { transition: border-color .15s, background .15s, box-shadow .2s; }
+.input:focus { box-shadow: 0 0 0 4px rgba(254,96,55,.12); }
+
+/* landing: 2 columns on desktop */
+.page--landing { max-width: 600px; }
+@media (min-width: 980px) {
+  .page--landing { max-width: 1160px; }
+  .landing { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: start; }
+  .landing .form-card { position: sticky; top: 24px; margin-top: 36px; }
+  .landing .preview { margin-left: 0; }
+}

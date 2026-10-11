@@ -100,7 +100,7 @@ export default function AuditForm({ industries }) {
       )}
 
       <button className="btn btn--primary btn--block btn--lg" type="submit" disabled={busy}>
-        {busy ? "Starting your audit…" : "Get my free audit →"}
+        {busy ? "Starting your audit…" : <>Get my free audit <span className="arr">→</span></>}
       </button>
       <p className="privacy">We only read public data. No login, no spam.</p>
     </form>
