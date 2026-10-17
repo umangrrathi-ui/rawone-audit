@@ -27,7 +27,7 @@ export default function StickyCta({ cfg }) {
       <p>
         <b>Full Audit + 30-day plan</b>
         <br />
-        <span style={{ opacity: 0.75 }}>36 posts · every Google issue · ₹{cfg.price}</span>
+        <span style={{ opacity: 0.75 }}>{cfg.booth ? <>36 posts · every Google issue · <s>₹{cfg.boothMrp}</s> FREE at our booth</> : <>36 posts · every Google issue · ₹{cfg.price}</>}</span>
       </p>
       <a className="btn btn--primary" href="#unlock" tabIndex={show ? 0 : -1}>
         Unlock →

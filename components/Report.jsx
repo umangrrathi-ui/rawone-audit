@@ -514,7 +514,9 @@ export default function Report({ audit, cfg }) {
       <PrintCta
         handle={ig.username}
         callLink={callLink}
-        unlockLink={cfg.payEnabled ? `${cfg.reportUrl}#unlock` : upsellHref(upsellCfg)}
+        unlockLink={cfg.payEnabled && !cfg.booth ? `${cfg.reportUrl}#unlock` : upsellHref(upsellCfg)}
+        booth={cfg.booth}
+        boothMrp={cfg.boothMrp}
         reportUrl={cfg.reportUrl}
         waNumber={cfg.waNumber}
         price={cfg.price}

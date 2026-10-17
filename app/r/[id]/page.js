@@ -57,6 +57,10 @@ export default async function ReportPage({ params, searchParams }) {
     reportUrl: `${(process.env.APP_URL || "").replace(/\/$/, "")}/r/${audit.id}`,
     payEnabled: !!(process.env.CASHFREE_APP_ID && process.env.CASHFREE_SECRET),
     paidReturn: sp?.paid === "1",
+    // Event booth offer: Full Audit shown as ₹999 struck out → FREE, claimed via our booth representative.
+    // On by default; set BOOTH_OFFER=0 in .env after the event to go back to normal pricing.
+    booth: process.env.BOOTH_OFFER !== "0",
+    boothMrp: Number(process.env.BOOTH_MRP) || 999,
   };
 
   const deepPending = audit.paid && audit.deep_status !== "done" && audit.deep_status !== "failed";

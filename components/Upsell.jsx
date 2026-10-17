@@ -2,7 +2,9 @@
 import PayButton from "./PayButton";
 
 export function upsellHref(cfg) {
-  const text = `Hi RawOne! I'd like the Full Audit + 30-day plan (₹${cfg.price}) for @${cfg.handle}. Code: ${cfg.code}`;
+  const text = cfg.booth
+    ? `Hi RawOne! I'm at your booth. Please unlock my FREE Full Audit + 30-day plan for @${cfg.handle}. Code: ${cfg.code}`
+    : `Hi RawOne! I'd like the Full Audit + 30-day plan (₹${cfg.price}) for @${cfg.handle}. Code: ${cfg.code}`;
   return cfg.waNumber ? `https://wa.me/${cfg.waNumber}?text=${encodeURIComponent(text)}` : "#";
 }
 
@@ -40,6 +42,7 @@ export default function Upsell({ cfg }) {
         </div>
       </div>
 
+      {cfg.booth ? <BoothOffer cfg={cfg} /> : (
       <div className="glow-card stack" style={{ gap: 18 }}>
         <span className="eyebrow eyebrow--white">Full Audit</span>
         <div>
@@ -58,6 +61,34 @@ export default function Upsell({ cfg }) {
           {cfg.payEnabled ? "Secure UPI / card payment · delivered on WhatsApp in ~3 minutes" : "Pay by UPI on WhatsApp · delivered within a few hours"}
         </p>
       </div>
+      )}
     </section>
+  );
+}
+
+function BoothOffer({ cfg }) {
+  return (
+    <div className="glow-card stack" style={{ gap: 18 }}>
+      <div className="booth-banner">
+        <b>Event special: get your Full Audit FREE</b>
+        <span>Ask our representative at the RawOne booth to unlock it for you.</span>
+      </div>
+      <span className="eyebrow eyebrow--white">Full Audit</span>
+      <div>
+        <div className="price">FREE <s>₹{cfg.boothMrp}</s></div>
+        <p className="small" style={{ marginTop: 6, opacity: 0.9 }}>Show this screen at our booth · valid during the event only</p>
+      </div>
+      <ul className="unlock-list">{INSIDE.map((t) => <li key={t}>{t}</li>)}</ul>
+      <div className="booth-code">
+        <span>Your audit code</span>
+        <b>{cfg.code}</b>
+      </div>
+      <a className="btn btn--light btn--lg btn--block" href={upsellHref(cfg)} target="_blank" rel="noreferrer">
+        Claim my FREE Full Audit
+      </a>
+      <p className="small" style={{ opacity: 0.9, textAlign: "center" }}>
+        Not at the booth? Tap above and message us on WhatsApp.
+      </p>
+    </div>
   );
 }

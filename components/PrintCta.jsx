@@ -1,7 +1,7 @@
 // Print-only closing page: clickable CTAs + QR fallback. Hidden on screen.
 import QRCode from "qrcode";
 
-export default async function PrintCta({ handle, callLink, unlockLink, reportUrl, waNumber, price, paid }) {
+export default async function PrintCta({ handle, callLink, unlockLink, reportUrl, waNumber, price, paid, booth, boothMrp }) {
   const qr = await QRCode.toString(callLink, { type: "svg", margin: 0, color: { dark: "#141414", light: "#ffffff" } });
   const phone = waNumber ? `+${waNumber.slice(0, 2)} ${waNumber.slice(2, 7)} ${waNumber.slice(7)}` : null;
   return (
@@ -15,7 +15,7 @@ export default async function PrintCta({ handle, callLink, unlockLink, reportUrl
         <div className="pc-links">
           <a className="pc-btn pc-btn--primary" href={callLink}>Book my free strategy call →</a>
           {!paid && unlockLink && (
-            <a className="pc-btn" href={unlockLink}>Unlock the Full Audit + 30-day plan — ₹{price} →</a>
+            <a className="pc-btn" href={unlockLink}>{booth ? <>Get the Full Audit + 30-day plan FREE at our booth (worth ₹{boothMrp}) →</> : <>Unlock the Full Audit + 30-day plan — ₹{price} →</>}</a>
           )}
           <a className="pc-btn" href={reportUrl}>Open the live report →</a>
           <p className="pc-contact">
